@@ -1,13 +1,254 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ruang Tenang</title>
-    <meta name="description" content="Ruang kecil untuk berhenti sejenak, mengenali perasaan, dan belajar meletakkan beban yang bukan milikmu." />
-  </head>
-  <body style="margin:0;">
-    <div id="root"></div>
-    <script type="module" src="/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1c1820">
+<title>Aril & Ratu Galuh P — Empat Bulan, Dua Cerita</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;font-family:Georgia,"Times New Roman",serif}
+  body{background:#17141b;color:#fff;overflow-x:hidden}
+  button,input,textarea{font:inherit}
+  .app{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:18px;
+       background:radial-gradient(circle at 50% 20%,#4b3545 0,#211b25 38%,#121016 100%)}
+  .phone{width:min(100%,430px);min-height:min(850px,calc(100vh - 36px));border:1px solid #ffffff20;
+         border-radius:34px;overflow:hidden;position:relative;
+         background:linear-gradient(160deg,#fff7f2,#f4ddd7 55%,#d9c0c4);
+         color:#33292d;box-shadow:0 25px 80px #0009}
+  .screen{display:none;min-height:100%;padding:34px 24px 28px;position:relative}
+  .screen.active{display:flex;flex-direction:column}
+  .tiny{font:600 11px/1.4 Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.65}
+  h1,h2,p{margin-top:0}
+  h1{font-size:36px;line-height:1.08;margin-bottom:16px}
+  h2{font-size:27px;line-height:1.15}
+  p{font:16px/1.65 Arial,sans-serif}
+  .muted{opacity:.68}
+  .center{text-align:center;justify-content:center;align-items:center}
+  .panda{font-size:82px;filter:drop-shadow(0 10px 10px #0002);animation:float 3s ease-in-out infinite}
+  .panda.small{font-size:52px}
+  @keyframes float{50%{transform:translateY(-8px) rotate(2deg)}}
+  .cloud{position:absolute;width:180px;height:80px;background:#fff6;border-radius:50%;
+         filter:blur(2px);right:-50px;top:70px}
+  .cloud.two{left:-80px;right:auto;top:55%;width:220px}
+  .btn{border:0;border-radius:999px;padding:15px 20px;cursor:pointer;
+       background:#282127;color:#fff;box-shadow:0 8px 22px #0002;font-weight:700}
+  .btn.light{background:#fff;color:#40343a;border:1px solid #3b2d3325}
+  .btn.ghost{background:#ffffff55;color:#34292e;border:1px solid #ffffff88}
+  .stack{display:grid;gap:12px}
+  .grow{flex:1}
+  .card{background:#ffffff75;border:1px solid #ffffffb0;border-radius:22px;padding:18px;
+        box-shadow:0 10px 30px #6c4e5415;backdrop-filter:blur(12px)}
+  .namecard{display:flex;align-items:center;gap:14px;cursor:pointer}
+  .avatar{width:58px;height:58px;border-radius:18px;background:#fff;display:grid;place-items:center;font-size:32px}
+  .input,.textarea{width:100%;border:1px solid #6a4d5628;background:#fff9;border-radius:18px;
+                    padding:15px;outline:none;color:#342a2e}
+  .textarea{min-height:150px;resize:vertical;line-height:1.5}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .progress{height:5px;background:#5a424920;border-radius:99px;overflow:hidden;margin-bottom:25px}
+  .progress i{display:block;height:100%;background:#5a4249;border-radius:99px;width:0}
+  .q{font-size:27px;line-height:1.22;margin-bottom:18px}
+  .answerbox{margin-top:auto}
+  .lock{font-size:62px;text-align:center;animation:pulse 2s infinite}
+  @keyframes pulse{50%{transform:scale(1.05);opacity:.8}}
+  .reveal{display:grid;gap:12px}
+  .answer{padding:16px;border-radius:18px;background:#fff9;border:1px solid #ffffff}
+  .footer-note{text-align:center;font:12px/1.5 Arial,sans-serif;opacity:.55;margin-top:16px}
+  .toast{position:absolute;left:18px;right:18px;bottom:20px;background:#2b242a;color:white;
+         padding:13px 16px;border-radius:15px;display:none;font:13px Arial,sans-serif;z-index:20}
+  .music{width:40px;height:40px;border-radius:50%;border:1px solid #ffffff80;background:#fff6;cursor:pointer}
+  .hidden{display:none!important}
+  @media (max-height:700px){.phone{min-height:calc(100vh - 20px)}.screen{padding-top:22px;padding-bottom:20px}.panda{font-size:65px}h1{font-size:30px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <main class="phone">
+    <div class="cloud"></div><div class="cloud two"></div>
+
+    <section id="s0" class="screen active center">
+      <button class="music" id="musicBtn" title="Musik">♪</button>
+      <div class="grow"></div>
+      <div class="panda">🐼</div>
+      <div class="tiny">ARIL & Ratu Galuh P</div>
+      <h1>Empat Bulan,<br>Dua Cerita.</h1>
+      <p class="muted">Sebuah ruang kecil untuk melihat kembali sebuah kedekatan dari dua sisi.</p>
+      <div class="grow"></div>
+      <button class="btn" onclick="go(1)">Masuk pelan-pelan ✨</button>
+      <div class="footer-note">Bukan kuis. Bukan interogasi. Cukup dua orang dan dua cerita.</div>
+    </section>
+
+    <section id="s1" class="screen">
+      <div class="tiny">Sebelum mulai</div>
+      <h2>Siapa yang masuk?</h2>
+      <p class="muted">Pilih nama yang ingin tampil di ruang ini.</p>
+      <div class="stack">
+        <div class="card namecard" onclick="choose('Aril')"><div class="avatar">🧑🏻</div><div><b>Aril</b><br><span class="muted">Masuk sebagai Aril</span></div></div>
+        <div class="card namecard" onclick="choose('Ratu Galuh P')"><div class="avatar">👩🏻</div><div><b>Ratu Galuh P</b><br><span class="muted">Masuk sebagai Ratu Galuh P</span></div></div>
+      </div>
+      <div class="grow"></div>
+      <div class="footer-note">Untuk versi online dua perangkat, tahap berikutnya adalah menambahkan room + database.</div>
+    </section>
+
+    <section id="s2" class="screen">
+      <div class="tiny">Ruang privat</div>
+      <h2>Ruang kalian 🐼</h2>
+      <p>Untuk versi prototype ini, kode hanya simulasi di perangkat. Nanti kita sambungkan ke database agar Aril dan Ratu Galuh P benar-benar bisa masuk dari HP masing-masing.</p>
+      <div class="card">
+        <div class="tiny">Contoh kode ruang</div>
+        <h2 id="code">AGP-4829</h2>
+        <p class="muted">Kode seperti ini nanti dibuat otomatis oleh sistem.</p>
+      </div>
+      <div class="grow"></div>
+      <button class="btn" onclick="go(3)">Mulai perjalanan 🌱</button>
+    </section>
+
+    <section id="s3" class="screen">
+      <div class="topbar"><span class="tiny">Bab 1 dari 8</span><span>🐼👋</span></div>
+      <div class="progress"><i style="width:12.5%"></i></div>
+      <div class="panda small">🐼👀</div>
+      <h2>Awalnya...</h2>
+      <p class="q">Waktu pertama kali mengenal, apa kesanmu?</p>
+      <textarea id="a1" class="textarea" placeholder="Tulis seadanya. Nggak perlu dibuat bagus..."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a1',4)">Simpan jawaban 🤍</button></div>
+    </section>
+
+    <section id="s4" class="screen">
+      <div class="topbar"><span class="tiny">Bab 2 dari 8</span><span>🐼☕</span></div>
+      <div class="progress"><i style="width:25%"></i></div>
+      <div class="panda small">🐼☕</div>
+      <p class="q">Kapan seseorang mulai terasa familiar dalam keseharianmu?</p>
+      <textarea id="a2" class="textarea" placeholder="Ceritakan dari sudut pandangmu..."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a2',5)">Simpan jawaban ✨</button></div>
+    </section>
+
+    <section id="s5" class="screen">
+      <div class="topbar"><span class="tiny">Bab 3 dari 8</span><span>🐼🤔</span></div>
+      <div class="progress"><i style="width:37.5%"></i></div>
+      <div class="panda small">🐼🤔</div>
+      <p class="q">Kalau beberapa bulan ini digambarkan dengan tiga perasaan, apa saja?</p>
+      <textarea id="a3" class="textarea" placeholder="Misalnya: nyaman, bingung, senang..."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a3',6)">Simpan jawaban 💭</button></div>
+    </section>
+
+    <section id="s6" class="screen">
+      <div class="topbar"><span class="tiny">Bab 4 dari 8</span><span>🐼😶</span></div>
+      <div class="progress"><i style="width:50%"></i></div>
+      <div class="panda small">🐼😶</div>
+      <p class="q">Selama mengenal, pernah nggak ada sesuatu yang membuatmu kecewa atau sakit hati?</p>
+      <textarea id="a4" class="textarea" placeholder="Boleh jujur. Tidak harus menyebut siapa yang salah."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a4',7)">Simpan jawaban 🌧️</button></div>
+    </section>
+
+    <section id="s7" class="screen">
+      <div class="topbar"><span class="tiny">Bab 5 dari 8</span><span>🐼🫠</span></div>
+      <div class="progress"><i style="width:62.5%"></i></div>
+      <div class="panda small">🐼🫠</div>
+      <p class="q">Menurutmu, kapan jarak mulai terasa dalam pertemanan ini?</p>
+      <textarea id="a5" class="textarea" placeholder="Tidak perlu mencari alasan yang sempurna..."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a5',8)">Simpan jawaban 🌿</button></div>
+    </section>
+
+    <section id="s8" class="screen">
+      <div class="topbar"><span class="tiny">Bab 6 dari 8</span><span>🐼🪞</span></div>
+      <div class="progress"><i style="width:75%"></i></div>
+      <div class="panda small">🐼🪞</div>
+      <p class="q">Ketika sedang lelah secara emosional, kamu lebih nyaman ditemani atau diberi ruang?</p>
+      <textarea id="a6" class="textarea" placeholder="Apa yang biasanya paling kamu butuhkan?"></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a6',9)">Simpan jawaban 🌱</button></div>
+    </section>
+
+    <section id="s9" class="screen">
+      <div class="topbar"><span class="tiny">Bab 7 dari 8</span><span>🐼🤝</span></div>
+      <div class="progress"><i style="width:87.5%"></i></div>
+      <div class="panda small">🐼🤝</div>
+      <p class="q">Apa hal baik dari pertemanan ini yang tidak ingin kamu hilangkan?</p>
+      <textarea id="a7" class="textarea" placeholder="Satu hal pun tidak apa-apa..."></textarea>
+      <div class="answerbox"><button class="btn" onclick="saveAnswer('a7',10)">Simpan jawaban 🤍</button></div>
+    </section>
+
+    <section id="s10" class="screen">
+      <div class="topbar"><span class="tiny">Bab 8 dari 8</span><span>🐼🌙</span></div>
+      <div class="progress"><i style="width:100%"></i></div>
+      <div class="panda small">🐼🥹</div>
+      <p class="q">Kalau tidak perlu memikirkan jawaban yang ingin didengar orang lain, sebenarnya apa yang kamu rasakan tentang pertemanan ini?</p>
+      <textarea id="a8" class="textarea" placeholder="Cukup jujur. Tidak perlu indah."></textarea>
+      <div class="answerbox"><button class="btn" onclick="finish()">Selesaikan perjalanan 🌙</button></div>
+    </section>
+
+    <section id="s11" class="screen center">
+      <div class="grow"></div>
+      <div class="panda">🐼🔒</div>
+      <h2>Jawabanmu tersimpan.</h2>
+      <p class="muted">Dalam versi dua-perangkat, jawaban ini akan terkunci sampai kedua orang selesai menjawab.</p>
+      <div class="card">
+        <b>Aril</b> 🔒<br><br>
+        <b>Ratu Galuh P</b> 🔒
+      </div>
+      <div class="grow"></div>
+      <button class="btn" onclick="go(12)">Simulasi buka jawaban ✨</button>
+    </section>
+
+    <section id="s12" class="screen">
+      <div class="tiny">Jawaban bersama</div>
+      <h2>Dua cerita, dua sudut pandang.</h2>
+      <div class="reveal">
+        <div class="answer"><b>Aril</b><br><br><span id="showAril">Jawaban akan muncul di sini.</span></div>
+        <div class="answer"><b>Ratu Galuh P</b><br><br><span>Jawaban Ratu Galuh P akan muncul setelah ia menjawab dari perangkatnya.</span></div>
+      </div>
+      <div class="grow"></div>
+      <p class="muted">Prototype ini menyimpan jawaban Aril hanya di browser. Untuk pertukaran jawaban sungguhan, kita akan memasang Supabase pada tahap berikutnya.</p>
+      <button class="btn" onclick="go(13)">Selesai 🤍</button>
+    </section>
+
+    <section id="s13" class="screen center">
+      <div class="grow"></div>
+      <div class="panda">🐼🤝</div>
+      <h2>Terima kasih sudah melihatnya dari dua sisi.</h2>
+      <p>“Tidak semua pertemanan harus selalu dekat dengan cara yang sama. Kadang dekat, kadang memberi ruang, kadang hanya saling tahu bahwa seseorang masih ada.”</p>
+      <p class="muted">Semoga apa pun bentuk pertemanan ini nanti, keduanya tetap punya ruang untuk menjadi dirinya sendiri.</p>
+      <div class="grow"></div>
+      <button class="btn light" onclick="go(0)">Kembali ke awal</button>
+    </section>
+
+    <div id="toast" class="toast"></div>
+  </main>
+</div>
+<script>
+let current=0;
+let chosen='';
+const answers={};
+function go(n){
+  document.getElementById('s'+current).classList.remove('active');
+  current=n;
+  document.getElementById('s'+current).classList.add('active');
+  window.scrollTo(0,0);
+}
+function choose(name){
+  chosen=name;
+  localStorage.setItem('displayName',name);
+  go(2);
+}
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block';
+  setTimeout(()=>t.style.display='none',2200);
+}
+function saveAnswer(id,next){
+  const v=document.getElementById(id).value.trim();
+  if(!v){toast('Tulis jawabanmu dulu ya 🐼');return;}
+  answers[id]=v;
+  localStorage.setItem('answer_'+id,v);
+  toast('Jawaban tersimpan 🤍');
+  setTimeout(()=>go(next),500);
+}
+function finish(){
+  const v=document.getElementById('a8').value.trim();
+  if(!v){toast('Satu jawaban terakhir dulu 🐼');return;}
+  answers.a8=v; localStorage.setItem('answer_a8',v);
+  document.getElementById('showAril').textContent=v;
+  go(11);
+}
+document.getElementById('musicBtn').onclick=()=>toast('Musik belum dinyalakan pada prototype 🎵');
+</script>
+</body>
 </html>
